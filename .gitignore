@@ -1,4 +1,16 @@
-.idea
-# Project exclude paths
+# Created by .ignore support plugin (hsz.mobi)
+### Scala template
+*.class
+*.log
+null
+
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+*.idea
+*.iml
+out
+gen
 /project/target/
 /target/
