@@ -1,17 +1,17 @@
 package com.kirchnersolutions.pi.scala.rest.routers
 
 import akka.http.scaladsl.server.Directives.{as, complete, entity, path, post}
+import com.kirchnersolutions.pi.scala.rest.traits.ConfigValues
 
 import scala.concurrent.ExecutionContext
 
-trait TempRouter {
-  def loginRoute(implicit ec: ExecutionContextin) =
-    path(PiCenterConstants.LOGIN_ENDPOINT) {
+trait TempRouter extends ConfigValues{
+  def tempRoute(implicit ec: ExecutionContextin) =
+    path(temp_endpoint) {
       post {
-        entity(as[PiCenterConstants.LogonForm]) { logonForm =>
           val res = logon(logonForm)
-          complete(res)
+          complete(runCommand)
         }
       }
-    }
+    }*/
 }
