@@ -6,6 +6,8 @@ scalaVersion := "2.13.1"
 
 scalacOptions += "-deprecation"
 
+unmanagedBase := baseDirectory.value / "libs"
+
 libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.1.10"
 libraryDependencies += "com.typesafe.akka" %% "akka-stream" % "2.6.0"
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3"

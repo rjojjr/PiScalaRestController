@@ -6,7 +6,8 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.{ExceptionHandler, Route}
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
-import com.kirchnersolutions.pi.scala.rest.routers.TempRouter
+import com.kirchnersolutions.pi.scala.rest.routers.StartJRouter
+import com.kirchnersolutions.pi.scala.rest.traits.Auth
 import com.typesafe.config.ConfigFactory
 
 import scala.concurrent.ExecutionContext
@@ -16,7 +17,7 @@ object WebService {
 
   def main(args: Array[String]): Unit = {
 
-    implicit object Device {
+    implicit object Device extends Auth {
 
       private val name = args(0)
       private val token = args(1)
@@ -25,9 +26,10 @@ object WebService {
         name
       }
 
-      def authToken(token: String): Boolean = {
+      def validateToken(token: String): Boolean = {
         this.token == token
       }
+
     }
 
     val config = ConfigFactory.load()
@@ -39,7 +41,7 @@ object WebService {
     implicit val executionContextExecutor = system.dispatcher // bindingFuture.map requires an implicit ExecutionContext
 
     implicit val materializer = ActorMaterializer() // bindAndHandle requires an implicit materializer
-    object MainRouter extends TempRouter {
+    object MainRouter extends StartJRouter {
       val routes = tempRoute
     }
 
