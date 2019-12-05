@@ -42,7 +42,7 @@ object WebService {
 
     implicit val materializer = ActorMaterializer() // bindAndHandle requires an implicit materializer
     object MainRouter extends StartJRouter {
-      val routes = tempRoute
+      val routes = runJRoute
     }
 
     val errorHandler = ExceptionHandler {

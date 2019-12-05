@@ -6,7 +6,7 @@ import java.lang.ProcessBuilder
 
 object ProcessService {
 
-  def runPiTemp(args: String): String = {
+  def runPiTemp(): String = {
     try {
       var found = false
       var line = ""
