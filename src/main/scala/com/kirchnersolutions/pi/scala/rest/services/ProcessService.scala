@@ -30,8 +30,12 @@ object ProcessService {
   }
 
   def rebootPi(): String = {
+    try {
     Runtime.getRuntime.exec("sudo reboot")
     "rebooting"
+    } catch {
+      case err: Exception => "failed"
+    }
   }
 
 }
