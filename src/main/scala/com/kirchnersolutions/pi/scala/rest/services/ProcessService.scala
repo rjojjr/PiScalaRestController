@@ -29,4 +29,9 @@ object ProcessService {
     }
   }
 
+  def rebootPi(): String = {
+    Runtime.getRuntime.exec("sudo reboot")
+    "rebooting"
+  }
+
 }
