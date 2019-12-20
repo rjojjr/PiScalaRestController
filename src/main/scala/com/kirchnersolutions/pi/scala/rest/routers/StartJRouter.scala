@@ -39,7 +39,7 @@ trait StartJRouter
           path("pitemp") {
             post {
               if (device.validateToken(value)) {
-                complete(runPythonMain())
+                complete(runPiTemp())
               } else {
                 complete("invalid token")
               }
