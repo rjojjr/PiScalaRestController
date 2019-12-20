@@ -12,10 +12,37 @@ object ProcessService {
       var line = ""
       val p = Runtime.getRuntime.exec("ps -aux")
       val input = new BufferedReader(new InputStreamReader(p.getInputStream))
-      while ((line = input.readLine) != null) {
+      line = input.readLine
+      while (line != null) {
         if (line.contains("java -jar pitemp")) {
           found = true
         } else found = false
+        line = input.readLine)
+      }
+      input.close()
+      if (found) {
+        "running"
+      } else {
+        Runtime.getRuntime.exec("java -jar pitemp-2.0.03b.jar")
+        "started"
+      }
+    } catch {
+      case err: Exception => "failed"
+    }
+  }
+
+  def runPythonMain(): String = {
+    try {
+      var found = false
+      var line = ""
+      val p = Runtime.getRuntime.exec("ps -aux")
+      val input = new BufferedReader(new InputStreamReader(p.getInputStream))
+      line = input.readLine)
+      while (line != null) {
+        if (line.contains("python main")) {
+          found = true
+        } else found = false
+        line = input.readLine)
       }
       input.close()
       if (found) {
@@ -31,8 +58,8 @@ object ProcessService {
 
   def rebootPi(): String = {
     try {
-    Runtime.getRuntime.exec("sudo reboot")
-    "rebooting"
+      Runtime.getRuntime.exec("sudo reboot")
+      "rebooting"
     } catch {
       case err: Exception => "failed"
     }

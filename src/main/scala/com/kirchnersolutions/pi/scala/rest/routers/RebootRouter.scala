@@ -10,16 +10,19 @@ import com.kirchnersolutions.pi.scala.rest.traits.{Auth, ConfigValues}
 
 import scala.concurrent.ExecutionContext
 
+import scala.language.postfixOps;
+
 trait RebootRouter extends ConfigValues with HeaderDirectives {
 
-  val tokenValue = "token" toLowerCase
-
   def extractToken: HttpHeader => Option[String] = {
-    case HttpHeader(`tokenValue`, value) => Some(value)
-    case _                               => None
+
+    case HttpHeader("token", value) => Some(value)
+    case _                          => None
   }
 
-  def rebootRoute(implicit ec: ExecutionContext, ac: ActorSystem, device: Auth) =
+  def rebootRoute(implicit ec: ExecutionContext,
+                  ac: ActorSystem,
+                  device: Auth) =
     (headerValue(extractToken) | provide("null")) { value =>
       path(reboot_endpoint) {
         post {

@@ -6,7 +6,11 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.{ExceptionHandler, Route}
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
-import com.kirchnersolutions.pi.scala.rest.routers.{RebootRouter, StartJRouter}
+import com.kirchnersolutions.pi.scala.rest.routers.{
+  RebootRouter,
+  StartJRouter,
+  StartPythonRouter
+}
 import com.kirchnersolutions.pi.scala.rest.traits.Auth
 import com.typesafe.config.ConfigFactory
 
@@ -41,8 +45,11 @@ object WebService {
     implicit val executionContextExecutor = system.dispatcher // bindingFuture.map requires an implicit ExecutionContext
 
     implicit val materializer = ActorMaterializer() // bindAndHandle requires an implicit materializer
-    object MainRouter extends StartJRouter with RebootRouter {
-      val routes = runJRoute ~ rebootRoute
+    object MainRouter
+        extends StartJRouter
+        with RebootRouter
+        with StartPythonRouter {
+      val routes = runJRoute ~ rebootRoute ~ runPythonRoute
     }
 
     val errorHandler = ExceptionHandler {

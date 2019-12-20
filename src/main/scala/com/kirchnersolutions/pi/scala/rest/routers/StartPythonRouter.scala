@@ -1,7 +1,5 @@
 package com.kirchnersolutions.pi.scala.rest.routers
 
-import java.awt.GraphicsDevice
-
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.HttpHeader
 import akka.http.scaladsl.server.Directives.{
@@ -14,23 +12,24 @@ import akka.http.scaladsl.server.Directives.{
   pathPrefix,
   post
 }
+import akka.http.scaladsl.server.directives.BasicDirectives.provide
 import akka.http.scaladsl.server.directives.HeaderDirectives
-import akka.http.scaladsl.server.directives.BasicDirectives._
-import com.kirchnersolutions.pi.scala.rest.traits.ConfigValues
-import com.kirchnersolutions.pi.scala.rest.services.ProcessService._
-import com.kirchnersolutions.pi.scala.rest.traits.Auth
+import com.kirchnersolutions.pi.scala.rest.services.ProcessService.runPythonMain
+import com.kirchnersolutions.pi.scala.rest.traits.{Auth, ConfigValues}
 
 import scala.language.postfixOps
 import scala.concurrent.ExecutionContext
 
-trait StartJRouter extends ConfigValues with HeaderDirectives {
+trait StartPythonRouter extends ConfigValues with HeaderDirectives {
 
   def extractToken: HttpHeader => Option[String] = {
     case HttpHeader("token", value) => Some(value)
     case _                          => None
   }
 
-  def runJRoute(implicit ec: ExecutionContext, ac: ActorSystem, device: Auth) =
+  def runPythonRoute(implicit ec: ExecutionContext,
+                     ac: ActorSystem,
+                     device: Auth) =
     (headerValue(extractToken) | provide("null")) { value =>
       pathPrefix("start") {
 
@@ -38,7 +37,7 @@ trait StartJRouter extends ConfigValues with HeaderDirectives {
           pathEnd {
             complete("Invalid path")
           }
-          path("pitemp") {
+          path("python") {
             post {
               if (device.validateToken(value)) {
                 complete(runPythonMain())
@@ -49,5 +48,4 @@ trait StartJRouter extends ConfigValues with HeaderDirectives {
         }
       }
     }
-
 }
