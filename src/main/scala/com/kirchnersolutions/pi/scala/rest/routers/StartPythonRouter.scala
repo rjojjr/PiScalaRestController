@@ -43,8 +43,9 @@ trait StartPythonRouter
             post {
               if (device.validateToken(value)) {
                 complete(runPythonMain())
+              } else {
+                complete("invalid token")
               }
-              complete("invalid token")
             }
           }
         }

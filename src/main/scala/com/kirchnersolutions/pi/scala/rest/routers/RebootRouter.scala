@@ -28,8 +28,10 @@ trait RebootRouter
         post {
           if (device.validateToken(value)) {
             complete(rebootPi())
+          } else {
+            complete("invalid token")
           }
-          complete("invalid token")
+
         }
       }
     }
