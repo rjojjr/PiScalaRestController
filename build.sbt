@@ -1,6 +1,6 @@
 name := "PiController"
 
-version := "0.1.01 build 100101"
+version := "0.1.01-build_100101"
 
 scalaVersion := "2.13.1"
 

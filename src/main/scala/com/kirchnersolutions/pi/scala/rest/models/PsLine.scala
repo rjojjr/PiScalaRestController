@@ -11,4 +11,4 @@ case class PsLine(user: String,
                   start: String,
                   time: String,
                   command: String)
-object PsLine
+object PsLine extends RestObject
