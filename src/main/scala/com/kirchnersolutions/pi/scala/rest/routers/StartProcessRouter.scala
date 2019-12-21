@@ -9,8 +9,7 @@ import akka.http.scaladsl.server.Directives.{
   path,
   pathEnd,
   pathPrefix,
-  post,
-  get
+  post
 }
 import akka.http.scaladsl.server.directives.HeaderDirectives
 import akka.http.scaladsl.server.directives.BasicDirectives._
@@ -38,7 +37,7 @@ trait StartProcessRouter
             complete("Invalid path")
           }
           path("pitemp") {
-            get {
+            post {
               if (device.validateToken(value)) {
                 complete(runPiTemp())
               } else {
@@ -47,7 +46,7 @@ trait StartProcessRouter
             }
           }
           path("dht") {
-            get {
+            post {
               if (device.validateToken(value)) {
                 complete(runPythonMain())
               } else {
