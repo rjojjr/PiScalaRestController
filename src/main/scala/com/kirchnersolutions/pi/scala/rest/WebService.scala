@@ -8,7 +8,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 import com.kirchnersolutions.pi.scala.rest.routers.{
   RebootRouter,
-  StartJRouter,
+  StartProcessRouter,
   StartPythonRouter
 }
 import com.kirchnersolutions.pi.scala.rest.traits.Auth
@@ -52,7 +52,7 @@ object WebService {
 
     implicit val materializer = ActorMaterializer() // bindAndHandle requires an implicit materializer
     object MainRouter
-        extends StartJRouter
+        extends StartProcessRouter
         with RebootRouter
         with StartPythonRouter {
       val routes = runJRoute ~ rebootRoute ~ runPythonRoute

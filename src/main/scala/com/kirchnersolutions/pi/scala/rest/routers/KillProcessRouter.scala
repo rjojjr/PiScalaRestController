@@ -23,14 +23,14 @@ import com.kirchnersolutions.pi.scala.rest.services.ProcessService._
 import scala.language.postfixOps
 import scala.concurrent.ExecutionContext
 
-trait StartJRouter
+trait KillProcessRouter
     extends ConfigValues
     with HeaderDirectives
     with ExtractToken {
 
-  def runJRoute(implicit ec: ExecutionContext, ac: ActorSystem, device: Auth) =
+  def killRoutes(implicit ec: ExecutionContext, ac: ActorSystem, device: Auth) =
     (headerValue(extractToken) | provide("null")) { value =>
-      pathPrefix("start") {
+      pathPrefix("kill") {
 
         concat {
           pathEnd {
@@ -39,7 +39,16 @@ trait StartJRouter
           path("pitemp") {
             post {
               if (device.validateToken(value)) {
-                complete(runPiTemp())
+                complete(killProcess("pitemp", 2))
+              } else {
+                complete("invalid token")
+              }
+            }
+          }
+          path("dht") {
+            post {
+              if (device.validateToken(value)) {
+                complete(killProcess("main.py", 2))
               } else {
                 complete("invalid token")
               }

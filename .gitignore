@@ -17,3 +17,8 @@ gen
 bash
 /bash
 /bash/
+oldSrc
+/oldSrc
+/oldSrc/
+/oldSrc/
+!/oldSrc/
