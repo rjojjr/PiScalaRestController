@@ -59,26 +59,19 @@ object ProcessService {
     }
   }
 
-  def killPiTemp(): String = {
+  def killProcess(name: String, killCode: Int): String = {
     try {
-      var found = false
-      var line = ""
-      val p = Runtime.getRuntime.exec("ps -aux")
-      val input = new BufferedReader(new InputStreamReader(p.getInputStream))
-      val in = new Scanner(input)
-      //line = input.readLine
-      while (in.hasNext()) {
-        if (line.contains("java -jar pitemp")) {
-          found = true
+      val pid = getPID(name)
+      if (pid > 0){
+        val p = Runtime.getRuntime.exec("kill -" + killCode + " " + pid)
+        Thread.sleep(150)
+        if(getPID(name) > 0){
+          return "killed"
+        }else{
+          return "failed to kill"
         }
-        line = input.readLine
-      }
-      input.close()
-      if (found) {
-        "running"
-      } else {
-        Runtime.getRuntime.exec("bash startJ.sh")
-        "started"
+      }else{
+        return "not running"
       }
     } catch {
       case err: Exception => "failed"
