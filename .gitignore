@@ -14,7 +14,9 @@ out
 gen
 /project/target/
 /target/
-bash
+*bash
 /bash
 /bash/
 /scrypts/
+project/project/target/config-classes/$3dc888db1f52aeb1da87.cache
+project/project/target/config-classes/$d7fd8f70c0bd0d4c3d7c.cache
