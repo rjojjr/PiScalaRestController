@@ -62,15 +62,15 @@ object ProcessService {
   def killProcess(name: String, killCode: Int): String = {
     try {
       val pid = getPID(name)
-      if (pid > 0){
+      if (pid > 0) {
         val p = Runtime.getRuntime.exec("kill -" + killCode + " " + pid)
         Thread.sleep(150)
-        if(getPID(name) > 0){
+        if (getPID(name) > 0) {
           return "killed"
-        }else{
+        } else {
           return "failed to kill"
         }
-      }else{
+      } else {
         return "not running"
       }
     } catch {
@@ -80,7 +80,7 @@ object ProcessService {
 
   def getPID(process: String): Int = {
     getProcesses().foreach(line => {
-      if(line.command.toLowerCase.contains(process.toLowerCase)){
+      if (line.command.toLowerCase.contains(process.toLowerCase)) {
         return line.pid
       }
     })
@@ -89,15 +89,15 @@ object ProcessService {
 
   def getPsLine(process: String): PsLine = {
     getProcesses().foreach(line => {
-      if(line.command.toLowerCase.contains(process.toLowerCase)){
+      if (line.command.toLowerCase.contains(process.toLowerCase)) {
         return line
       }
     })
-    return new PsLine("notfound", 0, 0, 0, 0, 0, "",, "", "", "", "")
+    return new PsLine("notfound", 0, 0, 0, 0, 0, "", "", "", "", "")
   }
 
   def getProcesses(): Seq[PsLine] = {
-    val lines: Seq[PsLine] = new [PsLine]
+    val lines: Seq[PsLine] = Seq()
     try {
       val p = Runtime.getRuntime.exec("ps -aux")
       val input = new BufferedReader(new InputStreamReader(p.getInputStream))
@@ -128,7 +128,21 @@ object ProcessService {
           case 9 => time = in.next()
           case 10 => {
             command = in.next()
-            lines ++ Seq(new PsLine(user, pid, cpu, mem, vsz, rss, tty, stat, start, time, command))
+            lines ++ Seq(
+              new PsLine(
+                user,
+                pid,
+                cpu,
+                mem,
+                vsz,
+                rss,
+                tty,
+                stat,
+                start,
+                time,
+                command
+              )
+            )
             count = -1
           }
         }
@@ -137,7 +151,8 @@ object ProcessService {
       input.close()
       lines
     } catch {
-      case err: Exception => Seq(new PsLine("failed", 0, 0, 0, 0, 0, "",, "", "", "", "")) ++ lines
+      case err: Exception =>
+        Seq(new PsLine("failed", 0, 0, 0, 0, 0, "", "", "", "", "")) ++ lines
     }
   }
 

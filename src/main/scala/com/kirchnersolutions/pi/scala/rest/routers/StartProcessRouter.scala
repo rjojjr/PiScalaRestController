@@ -29,7 +29,9 @@ trait StartProcessRouter
     with HeaderDirectives
     with ExtractToken {
 
-  def runRoutes(implicit ec: ExecutionContext, ac: ActorSystem, device: Auth) =
+  def runPiTempRoute(implicit ec: ExecutionContext,
+                     ac: ActorSystem,
+                     device: Auth) =
     (headerValue(extractToken) | provide("null")) { value =>
       pathPrefix("start") {
 
@@ -46,6 +48,21 @@ trait StartProcessRouter
               }
             }
           }
+        }
+
+      }
+    }
+
+  def runDHTRoute(implicit ec: ExecutionContext,
+                  ac: ActorSystem,
+                  device: Auth) =
+    (headerValue(extractToken) | provide("null")) { value =>
+      pathPrefix("start") {
+
+        concat {
+          pathEnd {
+            complete("Invalid path")
+          }
           path("dht") {
             get {
               if (device.validateToken(value)) {
@@ -57,6 +74,7 @@ trait StartProcessRouter
           }
         }
       }
+
     }
 
 }

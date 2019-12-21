@@ -29,7 +29,32 @@ trait KillProcessRouter
     with HeaderDirectives
     with ExtractToken {
 
-  def killRoutes(implicit ec: ExecutionContext, ac: ActorSystem, device: Auth) =
+  def killDHTRoutes(implicit ec: ExecutionContext,
+                    ac: ActorSystem,
+                    device: Auth) =
+    (headerValue(extractToken) | provide("null")) { value =>
+      pathPrefix("kill") {
+
+        concat {
+          pathEnd {
+            complete("Invalid path")
+          }
+          path("dht") {
+            get {
+              if (device.validateToken(value)) {
+                complete(killProcess("main.py", 2))
+              } else {
+                complete("invalid token")
+              }
+            }
+          }
+        }
+      }
+    }
+
+  def killPiTempRoutes(implicit ec: ExecutionContext,
+                       ac: ActorSystem,
+                       device: Auth) =
     (headerValue(extractToken) | provide("null")) { value =>
       pathPrefix("kill") {
 
@@ -41,15 +66,6 @@ trait KillProcessRouter
             get {
               if (device.validateToken(value)) {
                 complete(killProcess("pitemp", 2))
-              } else {
-                complete("invalid token")
-              }
-            }
-          }
-          path("dht") {
-            get {
-              if (device.validateToken(value)) {
-                complete(killProcess("main.py", 2))
               } else {
                 complete("invalid token")
               }

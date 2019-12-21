@@ -30,7 +30,7 @@ trait GetProcessesRouter
     with HeaderDirectives
     with ExtractToken {
 
-  def getRoutes(implicit ec: ExecutionContext, ac: ActorSystem, device: Auth) =
+  def getRoute(implicit ec: ExecutionContext, ac: ActorSystem, device: Auth) =
     (headerValue(extractToken) | provide("null")) { value =>
       path("processes") {
         get {
