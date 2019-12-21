@@ -15,3 +15,5 @@ gen
 /project/target/
 /target/
 bash
+/bash
+/bash/
