@@ -2,7 +2,7 @@ package com.kirchnersolutions.pi.scala.rest.routers
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.HttpHeader
-import akka.http.scaladsl.server.Directives.{complete, path, post}
+import akka.http.scaladsl.server.Directives.{complete, path, post, get}
 import akka.http.scaladsl.server.directives.BasicDirectives.provide
 import akka.http.scaladsl.server.directives.HeaderDirectives
 import com.kirchnersolutions.pi.scala.rest.services.ProcessService.rebootPi
@@ -25,7 +25,7 @@ trait RebootRouter
                   device: Auth) =
     (headerValue(extractToken) | provide("null")) { value =>
       path("reboot") {
-        post {
+        get {
           if (device.validateToken(value)) {
             complete(rebootPi())
           } else {
