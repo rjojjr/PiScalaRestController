@@ -7,9 +7,9 @@ import akka.http.scaladsl.server.{ExceptionHandler, Route}
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
 import com.kirchnersolutions.pi.scala.rest.routers.{
+  KillProcessRouter,
   RebootRouter,
-  StartProcessRouter,
-  StartPythonRouter
+  StartProcessRouter
 }
 import com.kirchnersolutions.pi.scala.rest.traits.Auth
 import com.typesafe.config.ConfigFactory
@@ -54,8 +54,8 @@ object WebService {
     object MainRouter
         extends StartProcessRouter
         with RebootRouter
-        with StartPythonRouter {
-      val routes = runJRoute ~ rebootRoute ~ runPythonRoute
+        with KillProcessRouter {
+      val routes = runRoutes ~ rebootRoute ~ killRoutes
     }
 
     val errorHandler = ExceptionHandler {
