@@ -97,12 +97,10 @@ object ProcessService {
   }
 
   def getProcesses(): Seq[PsLine] = {
-    val lines: Seq[PsLine] = Seq()
+    var lines: Seq[PsLine] = Seq()
     try {
       val p = Runtime.getRuntime.exec("ps -aux")
       val input = new BufferedReader(new InputStreamReader(p.getInputStream))
-      val in = new Scanner(input)
-      var count: Int = 0
       var user: String = ""
       var pid: Int = 0
       var cpu: Double = 0.0
@@ -114,45 +112,60 @@ object ProcessService {
       var start = ""
       var time = ""
       var command = ""
-      while (in.hasNext()) {
-        count match {
-          case 0 => user = in.next()
-          case 1 => pid = in.nextInt()
-          case 2 => cpu = in.nextDouble()
-          case 3 => mem = in.nextDouble()
-          case 4 => vsz = in.nextInt()
-          case 5 => rss = in.nextInt()
-          case 6 => tty = in.next()
-          case 7 => stat = in.next()
-          case 8 => start = in.next()
-          case 9 => time = in.next()
-          case 10 => {
-            command = in.next()
-            lines ++ Seq(
-              new PsLine(
-                user,
-                pid,
-                cpu,
-                mem,
-                vsz,
-                rss,
-                tty,
-                stat,
-                start,
-                time,
-                command
-              )
-            )
-            count = -1
+      var text: String = ""
+      var first = true
+      while ({
+        text = input.readLine;
+        text != null
+      }) {
+        if (first) {
+          first = false
+        } else {
+          var count = 0
+          val in = new Scanner(text);
+          while (count < 11) {
+            count match {
+              case 0 => user = in.next()
+              case 1 => pid = in.nextInt()
+              case 2 => cpu = in.nextDouble()
+              case 3 => mem = in.nextDouble()
+              case 4 => vsz = in.nextInt()
+              case 5 => rss = in.nextInt()
+              case 6 => tty = in.next()
+              case 7 => stat = in.next()
+              case 8 => start = in.next()
+              case 9 => time = in.next()
+              case 10 => {
+                command = in.next()
+                val line = Seq(
+                  new PsLine(
+                    user,
+                    pid,
+                    cpu,
+                    mem,
+                    vsz,
+                    rss,
+                    tty,
+                    stat,
+                    start,
+                    time,
+                    command
+                  )
+                )
+                lines = lines ++ line
+              }
+            }
+            count += 1
           }
+          in.close()
         }
-        count += 1
+
       }
-      input.close()
       lines
     } catch {
       case err: Exception =>
-        Seq(new PsLine("failed", 0, 0, 0, 0, 0, "", "", "", "", "")) ++ lines
+        err.printStackTrace()
+        Seq(new PsLine(err.getMessage, 0, 0, 0, 0, 0, "", "", "", "", "")) ++ lines
     }
   }
 

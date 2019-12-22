@@ -57,11 +57,14 @@ object WebService {
         with RebootRouter
         with KillProcessRouter
         with GetProcessesRouter {
-      val routes = runDHTRoute ~ runPiTempRoute ~ rebootRoute ~ killDHTRoutes ~ killPiTempRoutes ~ getRoute
+      val routes = runDHTRoute ~ runPiTempRoute ~ rebootRoute ~ killDHTRoutes ~ killPiTempRoutes ~ getIndividualRoute ~ getAllRoute
     }
 
     val errorHandler = ExceptionHandler {
-      case exception => complete(StatusCodes.BadRequest, exception.toString)
+      case exception =>
+        exception.printStackTrace()
+        complete(StatusCodes.BadRequest, exception.toString)
+
     }
     def routes = handleExceptions(errorHandler) { MainRouter$$.routes }
     val bindingFuture = Http().bindAndHandle(routes, ip, port)

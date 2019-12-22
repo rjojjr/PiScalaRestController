@@ -30,7 +30,9 @@ trait GetProcessesRouter
     with HeaderDirectives
     with ExtractToken {
 
-  def getRoute(implicit ec: ExecutionContext, ac: ActorSystem, device: Auth) =
+  def getAllRoute(implicit ec: ExecutionContext,
+                  ac: ActorSystem,
+                  device: Auth) =
     (headerValue(extractToken) | provide("null")) { value =>
       path("processes") {
         get {
@@ -40,6 +42,14 @@ trait GetProcessesRouter
             complete("invalid token")
           }
         }
+      }
+    }
+
+  def getIndividualRoute(implicit ec: ExecutionContext,
+                         ac: ActorSystem,
+                         device: Auth) =
+    (headerValue(extractToken) | provide("null")) { value =>
+      path("processes") {
         post {
           entity(as[CmdRequest]) { getProcess =>
             if (device.validateToken(value)) {
