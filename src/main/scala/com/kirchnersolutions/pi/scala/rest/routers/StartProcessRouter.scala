@@ -53,6 +53,26 @@ trait StartProcessRouter
       }
     }
 
+  def runStartInventory(implicit ec: ExecutionContext,
+                        ac: ActorSystem,
+                        device: Auth) =
+    (headerValue(extractToken) | provide("null")) { value =>
+      pathPrefix("start") {
+
+        concat {
+          pathEnd {
+            complete("Invalid path")
+          }
+          path("inventory") {
+            get {
+              complete(runInventory())
+            }
+          }
+        }
+      }
+
+    }
+
   def runDHTRoute(implicit ec: ExecutionContext,
                   ac: ActorSystem,
                   device: Auth) =

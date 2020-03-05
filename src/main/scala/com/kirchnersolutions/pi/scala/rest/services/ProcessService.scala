@@ -34,6 +34,11 @@ object ProcessService {
     }
   }
 
+  def runInventory(): String = {
+    val p = Runtime.getRuntime.exec("java -jar java-inventory-api.jar")
+    return "started"
+  }
+
   def runPythonMain(): String = {
     try {
       var found = false
@@ -136,7 +141,7 @@ object ProcessService {
               case 8 => start = in.next()
               case 9 => time = in.next()
               case 10 => {
-                command = in.next()
+                command = in.nextLine()
                 val line = Seq(
                   new PsLine(
                     user,
@@ -171,7 +176,7 @@ object ProcessService {
 
   def rebootPi(): String = {
     try {
-      Runtime.getRuntime.exec("sudo reboot")
+      Runtime.getRuntime.exec("reboot")
       "rebooting"
     } catch {
       case err: Exception => "failed"

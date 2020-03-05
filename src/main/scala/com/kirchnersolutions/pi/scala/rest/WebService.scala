@@ -57,7 +57,7 @@ object WebService {
         with RebootRouter
         with KillProcessRouter
         with GetProcessesRouter {
-      val routes = runDHTRoute ~ runPiTempRoute ~ rebootRoute ~ killDHTRoutes ~ killPiTempRoutes ~ getIndividualRoute ~ getAllRoute
+      val routes = runDHTRoute ~ runPiTempRoute ~ runStartInventory ~ rebootRoute ~ killDHTRoutes ~ killPiTempRoutes ~ getIndividualRoute ~ getAllRoute
     }
 
     val errorHandler = ExceptionHandler {
